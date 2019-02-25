@@ -1,0 +1,11 @@
+/.idea/
+/nbproject/
+/.nb-gradle
+/.gradle/
+/build/
+/out
+/classes
+/dist/
+/private
+JavaCopier.iml
+.*
