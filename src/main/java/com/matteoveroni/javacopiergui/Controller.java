@@ -33,6 +33,8 @@ public class Controller implements Initializable {
     @FXML private Label lbl_progressText;
     @FXML private TextArea txtArea_console;
 
+    //		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+    //		fileChooser.getExtensionFilters().add(extFilter);
     private final FileChooser fileChooser = new FileChooser();
 
     @Override
@@ -57,26 +59,15 @@ public class Controller implements Initializable {
         });
     }
 
-    @FXML
-    void onChooseSource(ActionEvent event) {
-//		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-//		fileChooser.getExtensionFilters().add(extFilter);
-        File file = fileChooser.showOpenDialog(pane.getScene().getWindow());
-        if (file != null) {
-            txt_source.setText(file.getAbsolutePath());
-        }
+    @FXML void onChooseSource(ActionEvent event) {
+        attachFileChooserToTextField(txt_source);
     }
 
-    @FXML
-    void onChooseDest(ActionEvent event) {
-        File file = fileChooser.showOpenDialog(pane.getScene().getWindow());
-        if (file != null) {
-            txt_dest.setText(file.getAbsolutePath());
-        }
+    @FXML void onChooseDest(ActionEvent event) {
+        attachFileChooserToTextField(txt_dest);
     }
 
-    @FXML
-    void onStartCopy(ActionEvent event) {
+    @FXML void onStartCopy(ActionEvent event) {
         txtArea_console.clear();
         pane_copyStatusArea.setVisible(true);
         btn_startCopy.setDisable(true);
@@ -125,5 +116,12 @@ public class Controller implements Initializable {
         progressBar.progressProperty().unbind();
         lbl_progressText.textProperty().unbind();
         copyTask.messageProperty().removeListener(copyMessageChangeListener);
+    }
+
+    private void attachFileChooserToTextField(TextField txt_source) {
+        File file = fileChooser.showOpenDialog(pane.getScene().getWindow());
+        if (file != null) {
+            txt_source.setText(file.getAbsolutePath());
+        }
     }
 }

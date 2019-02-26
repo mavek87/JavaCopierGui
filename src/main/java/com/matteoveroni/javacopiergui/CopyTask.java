@@ -8,6 +8,9 @@ import javafx.concurrent.Task;
 import java.nio.file.CopyOption;
 import java.nio.file.Path;
 
+/**
+ * @author Matteo Veroni
+ */
 public class CopyTask extends Task<CopyStatusReport> {
 
     private final Path src;
