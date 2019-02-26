@@ -79,6 +79,9 @@ public class Controller implements Initializable {
     void onStartCopy(ActionEvent event) {
         txtArea_console.clear();
         pane_copyStatusArea.setVisible(true);
+        btn_startCopy.setDisable(true);
+        btn_chooseSrc.setDisable(true);
+        btn_chooseDest.setDisable(true);
 
         Path src = Paths.get(txt_source.getText());
         Path dest = Paths.get(txt_dest.getText());
@@ -92,14 +95,23 @@ public class Controller implements Initializable {
         copyTask.setOnSucceeded(s -> {
             clearBindingsAndListeners(copyTask, copyMessageChangeListener);
             pane_copyStatusArea.setVisible(false);
+            btn_startCopy.setDisable(false);
+            btn_chooseSrc.setDisable(false);
+            btn_chooseDest.setDisable(false);
         });
         copyTask.setOnFailed(f -> {
             clearBindingsAndListeners(copyTask, copyMessageChangeListener);
             pane_copyStatusArea.setVisible(false);
+            btn_startCopy.setDisable(false);
+            btn_chooseSrc.setDisable(false);
+            btn_chooseDest.setDisable(false);
         });
         copyTask.setOnCancelled(c -> {
             clearBindingsAndListeners(copyTask, copyMessageChangeListener);
             pane_copyStatusArea.setVisible(false);
+            btn_startCopy.setDisable(false);
+            btn_chooseSrc.setDisable(false);
+            btn_chooseDest.setDisable(false);
         });
 
         Thread copyThread = new Thread(copyTask);
