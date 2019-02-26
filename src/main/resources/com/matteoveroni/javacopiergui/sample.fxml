@@ -34,7 +34,6 @@
                 <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Button fx:id="btn_chooseSrc" mnemonicParsing="false" onAction="#onChooseSource" text="Scegli" GridPane.columnIndex="2" />
@@ -43,10 +42,24 @@
                   <TextField fx:id="txt_dest" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label text="Source:" />
                   <Label text="Destination:" GridPane.rowIndex="2" />
-                  <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
-            <TextArea fx:id="txtArea_console" prefHeight="200.0" prefWidth="200.0" />
+            <BorderPane fx:id="pane_copyStatusArea">
+               <top>
+                  <Label fx:id="lbl_progressPercentage" text="30%" BorderPane.alignment="CENTER" />
+               </top>
+               <center>
+                  <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                     </BorderPane.margin>
+                  </ProgressBar>
+               </center>
+               <bottom>
+                  <Label fx:id="lbl_progressText" text="File src: c:\ copied" BorderPane.alignment="CENTER" />
+               </bottom>
+            </BorderPane>
+            <TextArea fx:id="txtArea_console" />
          </children>
       </VBox>
    </center>
