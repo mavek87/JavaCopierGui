@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -22,8 +23,10 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     @FXML private BorderPane pane;
-    @FXML private Button btn_chooseSrc;
-    @FXML private Button btn_chooseDest;
+    @FXML private Button btn_chooseSrcFile;
+    @FXML private Button btn_chooseDestFile;
+    @FXML private Button btn_chooseSrcDir;
+    @FXML private Button btn_chooseDestDir;
     @FXML private TextField txt_source;
     @FXML private TextField txt_dest;
     @FXML private Button btn_startCopy;
@@ -36,6 +39,7 @@ public class Controller implements Initializable {
     //		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
     //		fileChooser.getExtensionFilters().add(extFilter);
     private final FileChooser fileChooser = new FileChooser();
+    private final DirectoryChooser directoryChooser = new DirectoryChooser();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -59,20 +63,30 @@ public class Controller implements Initializable {
         });
     }
 
-    @FXML void onChooseSource(ActionEvent event) {
+    @FXML
+    void onChooseSourceFile(ActionEvent event) {
         attachFileChooserToTextField(txt_source);
     }
 
-    @FXML void onChooseDest(ActionEvent event) {
+    @FXML
+    void onChooseDestFile(ActionEvent event) {
         attachFileChooserToTextField(txt_dest);
     }
 
-    @FXML void onStartCopy(ActionEvent event) {
+    @FXML
+    void onChooseSourceDir(ActionEvent event) {
+        attachDirectoryChooserToTextField(txt_source);
+    }
+
+    @FXML
+    void onChooseDestDir(ActionEvent event) {
+        attachDirectoryChooserToTextField(txt_dest);
+    }
+
+    @FXML
+    void onStartCopy(ActionEvent event) {
         txtArea_console.clear();
-        pane_copyStatusArea.setVisible(true);
-        btn_startCopy.setDisable(true);
-        btn_chooseSrc.setDisable(true);
-        btn_chooseDest.setDisable(true);
+        setUiForCopyRunningLayout(true);
 
         Path src = Paths.get(txt_source.getText());
         Path dest = Paths.get(txt_dest.getText());
@@ -85,30 +99,30 @@ public class Controller implements Initializable {
         copyTask.messageProperty().addListener(copyMessageChangeListener);
         copyTask.setOnSucceeded(s -> {
             clearBindingsAndListeners(copyTask, copyMessageChangeListener);
-            pane_copyStatusArea.setVisible(false);
-            btn_startCopy.setDisable(false);
-            btn_chooseSrc.setDisable(false);
-            btn_chooseDest.setDisable(false);
+            setUiForCopyRunningLayout(false);
         });
         copyTask.setOnFailed(f -> {
             clearBindingsAndListeners(copyTask, copyMessageChangeListener);
-            pane_copyStatusArea.setVisible(false);
-            btn_startCopy.setDisable(false);
-            btn_chooseSrc.setDisable(false);
-            btn_chooseDest.setDisable(false);
+            setUiForCopyRunningLayout(false);
         });
         copyTask.setOnCancelled(c -> {
             clearBindingsAndListeners(copyTask, copyMessageChangeListener);
-            pane_copyStatusArea.setVisible(false);
-            btn_startCopy.setDisable(false);
-            btn_chooseSrc.setDisable(false);
-            btn_chooseDest.setDisable(false);
+            setUiForCopyRunningLayout(false);
         });
 
         Thread copyThread = new Thread(copyTask);
         // if copyThread is a daemon the copy doesnt stop when the ui is closed
         // thread.setDaemon(true);
         copyThread.start();
+    }
+
+    private void setUiForCopyRunningLayout(boolean isCopyRunning) {
+        pane_copyStatusArea.setVisible(isCopyRunning);
+        btn_startCopy.setDisable(isCopyRunning);
+        btn_chooseSrcFile.setDisable(isCopyRunning);
+        btn_chooseDestFile.setDisable(isCopyRunning);
+        btn_chooseSrcDir.setDisable(isCopyRunning);
+        btn_chooseDestDir.setDisable(isCopyRunning);
     }
 
     private void clearBindingsAndListeners(CopyTask copyTask, ChangeListener copyMessageChangeListener) {
@@ -120,6 +134,13 @@ public class Controller implements Initializable {
 
     private void attachFileChooserToTextField(TextField txt_source) {
         File file = fileChooser.showOpenDialog(pane.getScene().getWindow());
+        if (file != null) {
+            txt_source.setText(file.getAbsolutePath());
+        }
+    }
+
+    private void attachDirectoryChooserToTextField(TextField txt_source) {
+        File file = directoryChooser.showDialog(pane.getScene().getWindow());
         if (file != null) {
             txt_source.setText(file.getAbsolutePath());
         }

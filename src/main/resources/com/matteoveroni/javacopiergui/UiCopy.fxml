@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane fx:id="pane" minHeight="480.0" minWidth="640.0" prefHeight="480" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.matteoveroni.javacopiergui.Controller">
-   <bottom>
-      <Button fx:id="btn_startCopy" mnemonicParsing="false" onAction="#onStartCopy" text="Start copy" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets bottom="20.0" top="20.0" />
-         </BorderPane.margin>
-      </Button>
-   </bottom>
    <center>
       <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
          <padding>
@@ -22,23 +17,41 @@
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btn_chooseSrc" mnemonicParsing="false" onAction="#onChooseSource" text="Scegli" GridPane.columnIndex="2" />
-                  <Button fx:id="btn_chooseDest" mnemonicParsing="false" onAction="#onChooseDest" text="Scegli" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                   <TextField fx:id="txt_source" GridPane.columnIndex="1" />
                   <TextField fx:id="txt_dest" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label text="Source:" />
                   <Label text="Destination:" GridPane.rowIndex="2" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2">
+                     <children>
+                        <Button fx:id="btn_chooseSrcFile" mnemonicParsing="false" onAction="#onChooseSourceFile" text="Add File" />
+                        <Button fx:id="btn_chooseSrcDir" mnemonicParsing="false" onAction="#onChooseSourceDir" text="Add dir" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <children>
+                        <Button fx:id="btn_chooseDestFile" mnemonicParsing="false" onAction="#onChooseDestFile" text="Add File" />
+                        <Button fx:id="btn_chooseDestDir" mnemonicParsing="false" onAction="#onChooseDestDir" text="Add dir" />
+                     </children>
+                  </HBox>
                </children>
             </GridPane>
+            <BorderPane>
+               <center>
+                  <Button fx:id="btn_startCopy" mnemonicParsing="false" onAction="#onStartCopy" text="Start copy" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </BorderPane.margin>
+                  </Button>
+               </center>
+            </BorderPane>
             <BorderPane fx:id="pane_copyStatusArea">
                <top>
                   <Label fx:id="lbl_progressPercentage" text="30%" BorderPane.alignment="CENTER" />

@@ -13,6 +13,9 @@ import java.nio.file.Path;
  */
 public class CopyTask extends Task<CopyStatusReport> {
 
+    private static final int MAX_PERCENTAGE = 0;
+    private static final int MIN_PERCENTAGE = 0;
+
     private final Path src;
     private final Path dest;
     private final CopyOption[] copyOptions;
@@ -25,21 +28,24 @@ public class CopyTask extends Task<CopyStatusReport> {
 
     @Override
     protected CopyStatusReport call() throws Exception {
+        updateProgress(MIN_PERCENTAGE, MAX_PERCENTAGE);
+        updateMessage("");
 
         final CopyListener copyListener = new CopyListener() {
-            @Override public void onCopyProgress(CopyStatusReport copyStatusReport) {
+            @Override
+            public void onCopyProgress(CopyStatusReport copyStatusReport) {
                 double progress = copyStatusReport.getCopyPercentage() / 100;
-                updateProgress(progress, 1);
+                updateProgress(progress, MAX_PERCENTAGE);
                 updateMessage(copyStatusReport.getCopyHistory().getLastCopyHistoryEventMessage());
             }
 
-            @Override public void onCopyComplete(CopyStatusReport copyStatusReport) {
+            @Override
+            public void onCopyComplete(CopyStatusReport copyStatusReport) {
                 updateMessage("Copy finished");
-                updateProgress(1, 1);
+                updateProgress(MAX_PERCENTAGE, MAX_PERCENTAGE);
             }
         };
-        updateProgress(0, 1);
-        updateMessage("");
+
         return JavaCopier.copy(src, dest, copyListener, copyOptions);
     }
 }
