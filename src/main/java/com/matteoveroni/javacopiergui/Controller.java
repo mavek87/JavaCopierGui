@@ -35,6 +35,28 @@ public class Controller implements Initializable {
 
     private final FileChooser fileChooser = new FileChooser();
 
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        btn_startCopy.setVisible(true);
+        pane_copyStatusArea.setVisible(false);
+        txt_source.setText("C:\\Users\\veroni\\Downloads");
+        txt_dest.setText("C:\\Users\\veroni\\inesistente");
+        txt_source.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                btn_startCopy.setVisible(false);
+            } else if (!txt_dest.getText().trim().isEmpty()) {
+                btn_startCopy.setVisible(true);
+            }
+        });
+        txt_dest.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                btn_startCopy.setVisible(false);
+            } else if (!txt_source.getText().trim().isEmpty()) {
+                btn_startCopy.setVisible(true);
+            }
+        });
+    }
+
     @FXML
     void onChooseSource(ActionEvent event) {
 //		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
@@ -84,31 +106,6 @@ public class Controller implements Initializable {
         // if copyThread is a daemon the copy doesnt stop when the ui is closed
         // thread.setDaemon(true);
         copyThread.start();
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        btn_startCopy.setVisible(true);
-        pane_copyStatusArea.setVisible(false);
-
-        txt_source.setText("C:\\Users\\veroni\\Downloads");
-        txt_dest.setText("C:\\Users\\veroni\\inesistente");
-
-        txt_source.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                btn_startCopy.setVisible(false);
-            } else if (!txt_dest.getText().trim().isEmpty()) {
-                btn_startCopy.setVisible(true);
-            }
-        });
-
-        txt_dest.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                btn_startCopy.setVisible(false);
-            } else if (!txt_source.getText().trim().isEmpty()) {
-                btn_startCopy.setVisible(true);
-            }
-        });
     }
 
     private void clearBindingsAndListeners(CopyTask copyTask, ChangeListener copyMessageChangeListener) {
