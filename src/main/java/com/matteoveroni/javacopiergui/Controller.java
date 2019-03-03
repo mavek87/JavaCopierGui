@@ -36,8 +36,6 @@ public class Controller implements Initializable {
     @FXML private Label lbl_progressText;
     @FXML private TextArea txtArea_console;
 
-    //		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-    //		fileChooser.getExtensionFilters().add(extFilter);
     private final FileChooser fileChooser = new FileChooser();
     private final DirectoryChooser directoryChooser = new DirectoryChooser();
 
@@ -98,22 +96,31 @@ public class Controller implements Initializable {
         ChangeListener copyMessageChangeListener = (observable, oldValue, newValue) -> txtArea_console.appendText(copyTask.getMessage() + "\n");
         copyTask.messageProperty().addListener(copyMessageChangeListener);
         copyTask.setOnSucceeded(s -> {
-            clearBindingsAndListeners(copyTask, copyMessageChangeListener);
-            setUiForCopyRunningLayout(false);
+            finalizeTask(copyTask, copyMessageChangeListener);
         });
         copyTask.setOnFailed(f -> {
-            clearBindingsAndListeners(copyTask, copyMessageChangeListener);
-            setUiForCopyRunningLayout(false);
+            finalizeTask(copyTask, copyMessageChangeListener);
         });
         copyTask.setOnCancelled(c -> {
-            clearBindingsAndListeners(copyTask, copyMessageChangeListener);
-            setUiForCopyRunningLayout(false);
+            finalizeTask(copyTask, copyMessageChangeListener);
         });
 
         Thread copyThread = new Thread(copyTask);
         // if copyThread is a daemon the copy doesnt stop when the ui is closed
         // thread.setDaemon(true);
         copyThread.start();
+    }
+
+    private void finalizeTask(CopyTask copyTask, ChangeListener copyMessageChangeListener) {
+        clearBindingsAndListeners(copyTask, copyMessageChangeListener);
+        setUiForCopyRunningLayout(false);
+    }
+
+    private void clearBindingsAndListeners(CopyTask copyTask, ChangeListener copyMessageChangeListener) {
+        lbl_progressPercentage.textProperty().unbind();
+        progressBar.progressProperty().unbind();
+        lbl_progressText.textProperty().unbind();
+        copyTask.messageProperty().removeListener(copyMessageChangeListener);
     }
 
     private void setUiForCopyRunningLayout(boolean isCopyRunning) {
@@ -123,13 +130,6 @@ public class Controller implements Initializable {
         btn_chooseDestFile.setDisable(isCopyRunning);
         btn_chooseSrcDir.setDisable(isCopyRunning);
         btn_chooseDestDir.setDisable(isCopyRunning);
-    }
-
-    private void clearBindingsAndListeners(CopyTask copyTask, ChangeListener copyMessageChangeListener) {
-        lbl_progressPercentage.textProperty().unbind();
-        progressBar.progressProperty().unbind();
-        lbl_progressText.textProperty().unbind();
-        copyTask.messageProperty().removeListener(copyMessageChangeListener);
     }
 
     private void attachFileChooserToTextField(TextField txt_source) {
