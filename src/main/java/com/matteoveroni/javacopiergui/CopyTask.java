@@ -45,7 +45,6 @@ public class CopyTask extends Task<CopyStatusReport> {
                 updateProgress(MAX_PERCENTAGE, MAX_PERCENTAGE);
             }
         };
-
         return JavaCopier.copy(src, dest, copyListener, copyOptions);
     }
 }
