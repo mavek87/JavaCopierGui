@@ -43,17 +43,15 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         btn_startCopy.setVisible(true);
         pane_copyStatusArea.setVisible(false);
-        txt_source.setText("C:\\Users\\veroni\\Downloads");
-        txt_dest.setText("C:\\Users\\veroni\\inesistente");
         txt_source.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
+            if (newValue == null || newValue.trim().isEmpty()) {
                 btn_startCopy.setVisible(false);
             } else if (!txt_dest.getText().trim().isEmpty()) {
                 btn_startCopy.setVisible(true);
             }
         });
         txt_dest.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
+            if (newValue == null || newValue.trim().isEmpty()) {
                 btn_startCopy.setVisible(false);
             } else if (!txt_source.getText().trim().isEmpty()) {
                 btn_startCopy.setVisible(true);
